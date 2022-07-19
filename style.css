@@ -11,10 +11,15 @@ body {
     justify-content: center;
 }
 
-.game-board {
+#game-board {
     max-width: 150px;
     display: flex;
     flex-wrap: wrap;
+    visibility: hidden;
+}
+
+.show {
+    visibility: visible !important;
 }
 
 .board-square {
