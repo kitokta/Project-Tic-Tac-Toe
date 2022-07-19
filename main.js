@@ -5,10 +5,22 @@ const gameBoard = (() => {
         return board;
     }
 
-    const checkBoard = () => {
+    const checkFields = (human, ia) => {
+        let humanIndex = [];
+        human.played.forEach((cell, index) => {
+            if (cell === '1') {
+                humanIndex.push(index);
+            }
+        });
+            //Checking every possibility of win
+            if ((humanIndex[0] === 0 && humanIndex[1] === 3 && humanIndex[2] === 6)|| (humanIndex[0] === 1 && humanIndex[1] === 4 && humanIndex[2] === 7) || (humanIndex[0] === 2 && humanIndex[1] === 5 && humanIndex[2] === 8) || (humanIndex[0] === 0 && humanIndex[1] === 1 && humanIndex[2] === 2) || (humanIndex[0] === 3 && humanIndex[1] === 4 && humanIndex[2] === 5) || (humanIndex[0] === 6 && humanIndex[1] === 7 && humanIndex[2] === 8) || (humanIndex[0] === 0 && humanIndex[1] === 4 && humanIndex[2] === 8) || (humanIndex[0] === 2 && humanIndex[1] === 4 && humanIndex[2] === 6)) {
+                return alert(`${human.name} WINS! CONGRATULATIONS!`),
+                setTimeout("location.reload(true);",1);
+            }
         
     }
-    return { create };
+
+    return { create, checkFields };
 })(); 
      
 //UI TASKS CLASS
@@ -28,20 +40,19 @@ class uiTask {
                 if(board[i].innerText==""){
                 board[i].innerText = `${human.marker}`;
                 human.played[i] = "1";
+                gameBoard.checkFields(human);
                 }
             });
         }
     }
 }
 
-
-
 //PLAYER CLASS
 class Player {
     constructor(name, marker) {
         this.name = name;
         this.marker = marker;
-        this.played = ['', '', '', '', '', '', '', '', ''];
+        this.played = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
     }
 }
 
