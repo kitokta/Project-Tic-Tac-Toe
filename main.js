@@ -14,7 +14,7 @@ const gameBoard = (() => {
         });
             //Checking every possibility of win
             if ((humanIndex[0] === 0 && humanIndex[1] === 3 && humanIndex[2] === 6)|| (humanIndex[0] === 1 && humanIndex[1] === 4 && humanIndex[2] === 7) || (humanIndex[0] === 2 && humanIndex[1] === 5 && humanIndex[2] === 8) || (humanIndex[0] === 0 && humanIndex[1] === 1 && humanIndex[2] === 2) || (humanIndex[0] === 3 && humanIndex[1] === 4 && humanIndex[2] === 5) || (humanIndex[0] === 6 && humanIndex[1] === 7 && humanIndex[2] === 8) || (humanIndex[0] === 0 && humanIndex[1] === 4 && humanIndex[2] === 8) || (humanIndex[0] === 2 && humanIndex[1] === 4 && humanIndex[2] === 6)) {
-                return alert(`${human.name} WINS! CONGRATULATIONS!`),
+                return setTimeout(alert(`${human.name} WINS! CONGRATULATIONS!`), 5),
                 setTimeout("location.reload(true);",1);
             }
         
@@ -29,19 +29,22 @@ class uiTask {
         const board = gameBoard.create();
         const boardBox = document.getElementById('game-board');
         boardBox.classList.add("show");
-        // for (const square of board) {
-        //     square.addEventListener('click', (e) => {
-        //         square.innerText = "O";
-        //     });
-        // }
-        // ou
+       
         for (let i = 0; i < board.length; i++) {
             board[i].addEventListener('click', () => {
                 if(board[i].innerText==""){
-                board[i].innerText = `${human.marker}`;
-                human.played[i] = "1";
-                gameBoard.checkFields(human);
+                    //Human Play
+                    board[i].innerText = `${human.marker}`;
+                    human.played[i] = "1";
+
+                    //IA play
+                    let easyPlay = Math.floor((Math.random() * board.length) + 1);
+                    if(board[easyPlay].innerText==""){
+                    board[easyPlay].innerText = `${IA.marker}`;
+                    IA.played[easyPlay] = "1"
+                    }
                 }
+                setTimeout(gameBoard.checkFields(human), 1000);
             });
         }
     }
