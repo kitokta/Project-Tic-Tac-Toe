@@ -11,6 +11,24 @@ body {
     justify-content: center;
 }
 
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+.button {
+    color: #fff;
+    background-color: #000;
+    height: 60px;
+    padding: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
 #game-board {
     max-width: 150px;
     display: flex;

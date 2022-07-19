@@ -20,10 +20,16 @@ class uiTask {
 
 }
 
-//uiTask.displayBoard()
+
 
 //PLAYER CLASS
 
-//EVENT: START GAME
+//EVENTS: START GAME
+const button = document.querySelector('button');
+const contentBox = document.querySelector('content');
+button.addEventListener('click', () => {
+    button.remove();
+    uiTask.displayBoard();
+})
 
 //
