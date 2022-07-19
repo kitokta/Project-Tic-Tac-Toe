@@ -4,6 +4,10 @@ const gameBoard = (() => {
         const board = document.getElementsByClassName('board-square');
         return board;
     }
+
+    const checkBoard = () => {
+        
+    }
     return { create };
 })(); 
      
@@ -20,9 +24,10 @@ class uiTask {
         // }
         // ou
         for (let i = 0; i < board.length; i++) {
-            board[i].addEventListener('click', (e) => {
+            board[i].addEventListener('click', () => {
                 if(board[i].innerText==""){
                 board[i].innerText = `${human.marker}`;
+                human.played[i] = "1";
                 }
             });
         }
@@ -36,6 +41,7 @@ class Player {
     constructor(name, marker) {
         this.name = name;
         this.marker = marker;
+        this.played = ['', '', '', '', '', '', '', '', ''];
     }
 }
 
@@ -49,7 +55,7 @@ button.addEventListener('click', () => {
     //Human value inputs
     let name = prompt("What's your name?")
     let marker = prompt("Choose a marker: X or O")
-    if(marker!="X" || marker!="0") {
+    if(marker!="X" && marker!="O") {
         alert("Please insert a valid marker!");
         setTimeout("location.reload(true);",1);
     }
