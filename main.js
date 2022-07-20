@@ -53,25 +53,25 @@ const gameBoard = (() => {
         }
         });
             //Checking every possibility of IA win
-            for(let i=0; i<8; i++) {
-                if (checkScores(iaIndex, winCons[i])) {
-                    for(let c=0; c <winCons[i].length; c++){
-                        const square = document.getElementById(`${winCons[i][c]}`);
-                        square.style.borderColor = "#C73E1D"
-                        square.style.borderWidth= "2.2px"
-                    }
-                    IA.winner = true;
+        for(let i=0; i<8; i++) {
+            if (checkScores(iaIndex, winCons[i])) {
+                for(let c=0; c <winCons[i].length; c++){
+                    const square = document.getElementById(`${winCons[i][c]}`);
+                    square.style.borderColor = "#C73E1D"
+                    square.style.borderWidth= "2.2px"
                 }
+                IA.winner = true;
             }
+        }
 
-            if(IA.winner == true) {
-                const winMessage = document.createElement('h1');
-                winMessage.textContent = `Im Sorry! The ${IA.name} has won!`
-                winMessage.style.color = "#C73E1D"
-                winMessage.style.paddingBottom = "65px"
-                const contentBody = document.getElementById('content');
-                return contentBody.prepend(winMessage), setTimeout("location.reload(true);",5000);
-            }
+        if(IA.winner == true) {
+            const winMessage = document.createElement('h1');
+            winMessage.textContent = `Im Sorry! The ${IA.name} has won!`
+            winMessage.style.color = "#C73E1D"
+            winMessage.style.paddingBottom = "65px"
+            const contentBody = document.getElementById('content');
+            return contentBody.prepend(winMessage), setTimeout("location.reload(true);",5000);
+        }
         
         //Checking if its a tie
         let checktie = IA.numberOfPlays+human.numberOfPlays
