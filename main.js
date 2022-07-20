@@ -24,10 +24,20 @@ const gameBoard = (() => {
                 humanIndex.push(index);
             }
         });
-            for(let i=0; i<8; i++) {
+            for(let i=0; i<winCons.length; i++) {
                 if(checkScores(humanIndex, winCons[i])){
-                     return setTimeout(alert(`${human.name} WINS! CONGRATULATIONS!`), 1),
-                    setTimeout("location.reload(true);",1);
+                    for(let c=0; c <winCons[i].length; c++){
+                        const square = document.getElementById(`${winCons[i][c]}`);
+                        square.style.borderColor = "#0680FF"
+                        square.style.borderWidth = "1.2px"
+                    }
+                    const winMessage = document.createElement('h1');
+                    winMessage.textContent = `Congratulations! ${human.name} have won!`
+                    winMessage.style.paddingBottom = "65px"
+                    winMessage.style.color = "#0680FF"
+                    const contentBody = document.getElementById('content');
+                    return contentBody.prepend(winMessage),
+                    setTimeout("location.reload(true);",5000);
                 }
             }
 
@@ -42,8 +52,18 @@ const gameBoard = (() => {
             //Checking every possibility of IA win
             for(let i=0; i<8; i++) {
                 if (checkScores(iaIndex, winCons[i])) {
-                    return setTimeout(alert("THE MACHINE WON! TRY AGAIN!"), 5),
-                    setTimeout("location.reload(true);",1);
+                    for(let c=0; c <winCons[i].length; c++){
+                        const square = document.getElementById(`${winCons[i][c]}`);
+                        square.style.borderColor = "#C73E1D"
+                        square.style.borderWidth= "1.2px"
+                    }
+                    const winMessage = document.createElement('h1');
+                    winMessage.textContent = `Im Sorry! The ${IA.name} have won!`
+                    winMessage.style.color = "#C73E1D"
+                    winMessage.style.paddingBottom = "65px"
+                    const contentBody = document.getElementById('content');
+                    return contentBody.prepend(winMessage),
+                    setTimeout("location.reload(true);",5000);
                 }
             }
         
@@ -75,8 +95,6 @@ class uiTask {
                         human.numberOfPlays++;
 
                         //IA only stop playing when finds a blank space to play.
-                        let playChecker = 0
-                        
                             //IA easyPlay
                         for(let i=0; i< board.length; i++){
                             let easyPlay = Math.floor(Math.random() * board.length);
@@ -157,6 +175,10 @@ button.addEventListener('click', () => {
 
     //Human value inputs
     let name = prompt("What's your name?")
+    if(name=="") {
+        alert("Please insert a valid name!");
+        setTimeout("location.reload(true);",1);
+    }
     let marker = prompt("Choose a marker: X or O")
     marker = marker.toUpperCase();
     if(marker!="X" && marker!="O") {
@@ -173,5 +195,6 @@ button.addEventListener('click', () => {
 
     //Starting Game
     uiTask.game(human, IA);
+    
 })
 
