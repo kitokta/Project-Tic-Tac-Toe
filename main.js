@@ -66,7 +66,7 @@ class uiTask {
                         }
                     }
                 }
-                setTimeout(gameBoard.checkFields(human, IA), 1000);
+                setTimeout(gameBoard.checkFields, 300, human, IA);
             });
         }
     }
