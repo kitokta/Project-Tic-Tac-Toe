@@ -29,16 +29,19 @@ const gameBoard = (() => {
                     for(let c=0; c <winCons[i].length; c++){
                         const square = document.getElementById(`${winCons[i][c]}`);
                         square.style.borderColor = "#0680FF"
-                        square.style.borderWidth = "1.2px"
+                        square.style.borderWidth = "2.2px"
                     }
+                    human.winner = true;
+                }
+            }
+
+            if(human.winner == true) {
                     const winMessage = document.createElement('h1');
                     winMessage.textContent = `Congratulations! ${human.name} have won!`
                     winMessage.style.paddingBottom = "65px"
                     winMessage.style.color = "#0680FF"
                     const contentBody = document.getElementById('content');
-                    return contentBody.prepend(winMessage),
-                    setTimeout("location.reload(true);",5000);
-                }
+                    return contentBody.prepend(winMessage), setTimeout("location.reload(true);",5000);
             }
 
         //IA
@@ -55,29 +58,50 @@ const gameBoard = (() => {
                     for(let c=0; c <winCons[i].length; c++){
                         const square = document.getElementById(`${winCons[i][c]}`);
                         square.style.borderColor = "#C73E1D"
-                        square.style.borderWidth= "1.2px"
+                        square.style.borderWidth= "2.2px"
                     }
-                    const winMessage = document.createElement('h1');
-                    winMessage.textContent = `Im Sorry! The ${IA.name} have won!`
-                    winMessage.style.color = "#C73E1D"
-                    winMessage.style.paddingBottom = "65px"
-                    const contentBody = document.getElementById('content');
-                    return contentBody.prepend(winMessage),
-                    setTimeout("location.reload(true);",5000);
+                    IA.winner = true;
                 }
+            }
+
+            if(IA.winner == true) {
+                const winMessage = document.createElement('h1');
+                winMessage.textContent = `Im Sorry! The ${IA.name} has won!`
+                winMessage.style.color = "#C73E1D"
+                winMessage.style.paddingBottom = "65px"
+                const contentBody = document.getElementById('content');
+                return contentBody.prepend(winMessage), setTimeout("location.reload(true);",5000);
             }
         
         //Checking if its a tie
         let checktie = IA.numberOfPlays+human.numberOfPlays
         if(checktie == 9) {
-            return setTimeout(alert("TIE!"), 5),
-                    setTimeout("location.reload(true);",1);
+            human.winner = true;
+            IA.winner = true;
+            const winMessage = document.createElement('h1');
+            winMessage.textContent = `ITS A TIE! BETTER LUCK NEXT TIME!`
+            winMessage.style.color = "#FF9EAA"
+            winMessage.style.paddingBottom = "65px"
+            const contentBody = document.getElementById('content');
+            return contentBody.prepend(winMessage), setTimeout("location.reload(true);",5000);
         }
     }
 
     return { create, checkFields };
 })(); 
-     
+
+//PLAYER CLASS
+class Player {
+    constructor(name, marker) {
+        this.name = name;
+        this.marker = marker;
+        this.played = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
+        this.numberOfPlays = 0;
+        this.winner = false
+    }
+}
+
+
 //UI TASKS CLASS
 class uiTask {
     static game(human, IA) {
@@ -93,22 +117,25 @@ class uiTask {
                         board[i].innerText = `${human.marker}`;
                         human.played[i] = "1";
                         human.numberOfPlays++;
-                        setTimeout(gameBoard.checkFields, 300, human, IA);
+                        if(human.winner != true && IA.winner != true) gameBoard.checkFields(human, IA);
                         //IA only stop playing when finds a blank space to play.
-                            //IA easyPlay
-                        for(let i=0; i< board.length; i++){
-                            let easyPlay = Math.floor(Math.random() * board.length);
-                            if(board[easyPlay].innerText==""){
-                                board[easyPlay].innerText = `${IA.marker}`;
-                                IA.played[easyPlay] = "1"
-                                IA.numberOfPlays++;
-                                i = board.length;
+                        //IA easyPlay
+                        //IA only plays if there is not already a winner
+                        if(human.winner != true && IA.winner != true){
+                            for(let i=0; i< board.length; i++){
+                                let easyPlay = Math.floor(Math.random() * board.length);
+                                if(board[easyPlay].innerText==""){
+                                    board[easyPlay].innerText = `${IA.marker}`;
+                                    IA.played[easyPlay] = "1"
+                                    IA.numberOfPlays++;
+                                    i = board.length;
+                                }
                             }
                         }
-                        
                     }
                     //Timeout to show player and IA inputs before testing the fields for wincons or tie!
-                    setTimeout(gameBoard.checkFields, 300, human, IA);
+                    //Testing if there isnt already a winner
+                    if(human.winner != true && IA.winner != true) setTimeout(gameBoard.checkFields, 300, human, IA);
                 });
             }
         }
@@ -122,11 +149,11 @@ class uiTask {
                         board[i].innerText = `${human.marker}`;
                         human.played[i] = "1";
                         human.numberOfPlays++;
-                        setTimeout(gameBoard.checkFields, 300, human, IA);
-                        //IA only stop playing when finds a blank space to play.
-                        let playChecker = 0
-                        
+                        if(human.winner != true && IA.winner != true) gameBoard.checkFields(human, IA);
+                            //IA only stop playing when finds a blank space to play.
                             //IA easyPlay
+                            //IA only plays if there is not already a winner
+                        if(human.winner != true && IA.winner != true){
                             for(let i=0; i< board.length; i++){
                                 let easyPlay = Math.floor(Math.random() * board.length);
                                 if(board[easyPlay].innerText==""){
@@ -136,9 +163,11 @@ class uiTask {
                                     i = board.length;
                                 }
                             }
+                        }
                     }
                     //Timeout to show player and IA inputs before testing the fields for wincons or tie!
-                    setTimeout(gameBoard.checkFields, 300, human, IA);
+                    //Testing if there isnt already a winner
+                    if(human.winner != true && IA.winner != true) setTimeout(gameBoard.checkFields, 300, human, IA);
                 });
             }
         }
@@ -155,16 +184,6 @@ class uiTask {
     }
 }
 
-
-//PLAYER CLASS
-class Player {
-    constructor(name, marker) {
-        this.name = name;
-        this.marker = marker;
-        this.played = ['0', '0', '0', '0', '0', '0', '0', '0', '0'];
-        this.numberOfPlays = 0;
-    }
-}
 
 
 //EVENTS: START GAME

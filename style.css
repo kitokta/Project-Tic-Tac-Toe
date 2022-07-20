@@ -9,6 +9,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #FBFEDA;
 }
 
 .content {
@@ -19,18 +20,19 @@ body {
     padding: 25px;
 }
 .button {
-    color: #fff;
-    background-color: #000;
+    color: #FBFEDA;
+    background-color: #A31C5D;
     height: 60px;
     padding: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
+    border-color: #FF6E96;
 }
 
 #game-board {
-    max-width: 150px;
+    max-width: 450px;
     display: flex;
     flex-wrap: wrap;
     visibility: hidden;
@@ -41,12 +43,12 @@ body {
 }
 
 .board-square {
-    border: 1px solid #000;
-    height: 50px;
-    width: 50px;
+    border: 2px solid #A31C5D;
+    height: 150px;
+    width: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 32px;
+    font-size: 64px;
     flex-shrink: 0;
 }
