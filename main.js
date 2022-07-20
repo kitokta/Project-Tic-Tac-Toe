@@ -5,8 +5,18 @@ const gameBoard = (() => {
         return board;
     }
 
+    const checkScores = (arr, values) => {
+        return values.every(value => {
+            return arr.includes(value);
+          });
+    }
+    
     const checkFields = (human, IA) => {
-       //Human
+        //Wincons
+        const winCons = [[0,3,6],[1,4,7],[2,5,8],[0,1,2],[3,4,5],[6,7,8],[0,4,8],[2,4,6]];
+       
+
+        //Human
         let humanIndex = [];
         //For each cell that was played by the human player we push its index to another array so we can test all win cons later
         human.played.forEach((cell, index) => {
@@ -14,10 +24,11 @@ const gameBoard = (() => {
                 humanIndex.push(index);
             }
         });
-            //Checking every possibility of Human win
-            if ((humanIndex[0] === 0 && humanIndex[1] === 3 && humanIndex[2] === 6)|| (humanIndex[0] === 1 && humanIndex[1] === 4 && humanIndex[2] === 7) || (humanIndex[0] === 2 && humanIndex[1] === 5 && humanIndex[2] === 8) || (humanIndex[0] === 0 && humanIndex[1] === 1 && humanIndex[2] === 2) || (humanIndex[0] === 3 && humanIndex[1] === 4 && humanIndex[2] === 5) || (humanIndex[0] === 6 && humanIndex[1] === 7 && humanIndex[2] === 8) || (humanIndex[0] === 0 && humanIndex[1] === 4 && humanIndex[2] === 8) || (humanIndex[0] === 2 && humanIndex[1] === 4 && humanIndex[2] === 6)) {
-                return setTimeout(alert(`${human.name} WINS! CONGRATULATIONS!`), 5),
-                setTimeout("location.reload(true);",1);
+            for(let i=0; i<8; i++) {
+                if(checkScores(humanIndex, winCons[i])){
+                     return setTimeout(alert(`${human.name} WINS! CONGRATULATIONS!`), 1),
+                    setTimeout("location.reload(true);",1);
+                }
             }
 
         //IA
@@ -29,12 +40,19 @@ const gameBoard = (() => {
         }
         });
             //Checking every possibility of IA win
-            if ((iaIndex[0] === 0 && iaIndex[1] === 3 && iaIndex[2] === 6)|| (iaIndex[0] === 1 && iaIndex[1] === 4 && iaIndex[2] === 7) || (iaIndex[0] === 2 && iaIndex[1] === 5 && iaIndex[2] === 8) || (iaIndex[0] === 0 && iaIndex[1] === 1 && iaIndex[2] === 2) || (iaIndex[0] === 3 && iaIndex[1] === 4 && iaIndex[2] === 5) || (iaIndex[0] === 6 && iaIndex[1] === 7 && iaIndex[2] === 8) || (iaIndex[0] === 0 && iaIndex[1] === 4 && iaIndex[2] === 8) || (iaIndex[0] === 2 && iaIndex[1] === 4 && iaIndex[2] === 6)) {
-                return setTimeout(alert("THE MACHINE WON! TRY AGAIN!"), 5),
-                setTimeout("location.reload(true);",1);
+            for(let i=0; i<8; i++) {
+                if (checkScores(iaIndex, winCons[i])) {
+                    return setTimeout(alert("THE MACHINE WON! TRY AGAIN!"), 5),
+                    setTimeout("location.reload(true);",1);
+                }
             }
-            
         
+        //Checking if its a tie
+        let checktie = IA.numberOfPlays+human.numberOfPlays
+        if(checktie == 9) {
+            return setTimeout(alert("TIE!"), 5),
+                    setTimeout("location.reload(true);",1);
+        }
     }
 
     return { create, checkFields };
@@ -47,30 +65,78 @@ class uiTask {
         const boardBox = document.getElementById('game-board');
         boardBox.classList.add("show");
        
-        for (let i = 0; i < board.length; i++) {
-            board[i].addEventListener('click', () => {
-                if(board[i].innerText==""){
-                    //Human Play
-                    board[i].innerText = `${human.marker}`;
-                    human.played[i] = "1";
-                    human.numberOfPlays++;
+        if(human.marker=="X"){
+            for (let i = 0; i < board.length; i++) {
+                board[i].addEventListener('click', () => {
+                    if(board[i].innerText==""){
+                        //Human Play
+                        board[i].innerText = `${human.marker}`;
+                        human.played[i] = "1";
+                        human.numberOfPlays++;
 
-                    //IA only stop playing when finds a blank space to play.
-                    while(IA.numberOfPlays<human.numberOfPlays){
-                        //IA easyPlay
-                        let easyPlay = Math.floor((Math.random() * board.length) + 1);
-                        if(board[easyPlay].innerText==""){
-                            board[easyPlay].innerText = `${IA.marker}`;
-                            IA.played[easyPlay] = "1"
-                            IA.numberOfPlays++;
+                        //IA only stop playing when finds a blank space to play.
+                        let playChecker = 0
+                        
+                            //IA easyPlay
+                        for(let i=0; i< board.length; i++){
+                            let easyPlay = Math.floor(Math.random() * board.length);
+                            if(board[easyPlay].innerText==""){
+                                board[easyPlay].innerText = `${IA.marker}`;
+                                IA.played[easyPlay] = "1"
+                                IA.numberOfPlays++;
+                                i = board.length;
+                            }
                         }
+                        
                     }
-                }
-                setTimeout(gameBoard.checkFields, 300, human, IA);
-            });
+                    //Timeout to show player and IA inputs before testing the fields for wincons or tie!
+                    setTimeout(gameBoard.checkFields, 300, human, IA);
+                });
+            }
+        }
+
+        else {
+            uiTask.firstPlay(IA, board);
+            for (let i = 0; i < board.length; i++) {
+                board[i].addEventListener('click', () => {
+                    if(board[i].innerText==""){
+                        //Human Play
+                        board[i].innerText = `${human.marker}`;
+                        human.played[i] = "1";
+                        human.numberOfPlays++;
+
+                        //IA only stop playing when finds a blank space to play.
+                        let playChecker = 0
+                        
+                            //IA easyPlay
+                            for(let i=0; i< board.length; i++){
+                                let easyPlay = Math.floor(Math.random() * board.length);
+                                if(board[easyPlay].innerText==""){
+                                    board[easyPlay].innerText = `${IA.marker}`;
+                                    IA.played[easyPlay] = "1"
+                                    IA.numberOfPlays++;
+                                    i = board.length;
+                                }
+                            }
+                    }
+                    //Timeout to show player and IA inputs before testing the fields for wincons or tie!
+                    setTimeout(gameBoard.checkFields, 300, human, IA);
+                });
+            }
+        }
+    }
+
+    static firstPlay(IA, board) {
+        //IA easyPlay
+        let easyPlay = Math.floor(Math.random() * board.length);
+        if(board[easyPlay].innerText==""){
+            board[easyPlay].innerText = `${IA.marker}`;
+            IA.played[easyPlay] = "1"
+            IA.numberOfPlays++;
         }
     }
 }
+
 
 //PLAYER CLASS
 class Player {
