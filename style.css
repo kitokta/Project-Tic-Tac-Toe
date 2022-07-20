@@ -38,6 +38,7 @@ body {
     visibility: hidden;
 }
 
+/* Classe que deixa visivel o board */
 .show {
     visibility: visible !important;
 }
