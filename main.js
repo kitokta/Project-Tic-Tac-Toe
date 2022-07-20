@@ -93,7 +93,7 @@ class uiTask {
                         board[i].innerText = `${human.marker}`;
                         human.played[i] = "1";
                         human.numberOfPlays++;
-
+                        setTimeout(gameBoard.checkFields, 300, human, IA);
                         //IA only stop playing when finds a blank space to play.
                             //IA easyPlay
                         for(let i=0; i< board.length; i++){
@@ -114,7 +114,7 @@ class uiTask {
         }
 
         else {
-            uiTask.firstPlay(IA, board);
+            setTimeout(uiTask.firstPlay, 300, IA, board);
             for (let i = 0; i < board.length; i++) {
                 board[i].addEventListener('click', () => {
                     if(board[i].innerText==""){
@@ -122,7 +122,7 @@ class uiTask {
                         board[i].innerText = `${human.marker}`;
                         human.played[i] = "1";
                         human.numberOfPlays++;
-
+                        setTimeout(gameBoard.checkFields, 300, human, IA);
                         //IA only stop playing when finds a blank space to play.
                         let playChecker = 0
                         
