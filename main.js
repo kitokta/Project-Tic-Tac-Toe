@@ -156,7 +156,7 @@ class Game {
         });
       }
     } else {
-      setTimeout(uiTask.firstPlay, 300, IA, board);
+      setTimeout(IA.iaPlay(IA,board), 300, IA, board);
       for (let i = 0; i < board.length; i++) {
         board[i].addEventListener("click", () => {
           if (board[i].innerText == "") {
@@ -185,16 +185,6 @@ class uiTask {
     const boardBox = document.getElementById("game-board");
     boardBox.classList.add("show");
     Game.gameController(human, IA, board);
-  }
-
-  static firstPlay(IA, board) {
-    //IA easyPlay
-    let easyPlay = Math.floor(Math.random() * board.length);
-    if (board[easyPlay].innerText == "") {
-      board[easyPlay].innerText = `${IA.marker}`;
-      IA.played[easyPlay] = "1";
-      IA.numberOfPlays++;
-    }
   }
 
   static getPlayerName() {
