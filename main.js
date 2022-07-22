@@ -121,14 +121,16 @@ class Player {
     //IA only stop playing when finds a blank space to play.
     //IA easyPlay
     //IA only plays if there is not already a winner
-    for (let i = 0; i < board.length; i++) {
+    let i = 1;
+    while(i!=0) {
       let easyPlay = Math.floor(Math.random() * board.length);
       if (board[easyPlay].innerText == "") {
         IA.played[easyPlay] = "1";
         IA.numberOfPlays++;
-        i = board.length;
+        i = 0;
         return (board[easyPlay].innerText = `${IA.marker}`);
       }
+      i++;
     }
   }
 }
