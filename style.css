@@ -1,113 +1,111 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #FBFEDA;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fbfeda;
 }
 
 .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 25px;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+  gap: 20px;
 }
 
 .heading {
-    color:#A31C5D;
-    font-size: 48px;
+  color: #a31c5d;
+  font-size: 48px;
 }
 
 #name-warning {
-    visibility: hidden;
+  visibility: hidden;
+  max-width: 65%;
+  text-align: center;
 }
 #button-container {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .button {
-    color: #A31C5D;
-    background-color: #FBFEDA;
-    height: 80px;
-    width: 100px;
-    font-size: 40px;
-    padding: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    border-color: #FF6E96;
+  color: #a31c5d;
+  background-color: #fbfeda;
+  height: 80px;
+  width: 100px;
+  font-size: 40px;
+  padding: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  border-color: #ff6e96;
 }
 
 .button:hover {
-    background-color: #A31C5D;
-    color: #FBFEDA;
-    border: 2px;
+  background-color: #a31c5d;
+  color: #fbfeda;
+  border: 2px;
 }
 
 #game-board {
-    max-width: 450px;
-    display: flex;
-    flex-wrap: wrap;
-    visibility: hidden;
+  max-width: 450px;
+  display: flex;
+  flex-wrap: wrap;
+  visibility: hidden;
 }
 
 /* Classe que deixa visivel o board */
 .show {
-    visibility: visible !important;
+  visibility: visible !important;
 }
 
 .board-square {
-    border: 2px solid #A31C5D;
-    height: 150px;
-    width: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 64px;
-    flex-shrink: 0;
-    background-color: #FBFEDA;
-    border-radius: 2px;
+  border: 2px solid #a31c5d;
+  height: 150px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 64px;
+  flex-shrink: 0;
+  background-color: #fbfeda;
+  border-radius: 2px;
 }
 
 .board-square.left {
-    border-left: none;
+  border-left: none;
 }
 .board-square.right {
-    border-right: none;
+  border-right: none;
 }
 
 .board-square.top {
-    border-top: none;
+  border-top: none;
 }
 
 .board-square.bottom {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 /* Mobile */
 /* Portrait and Landscape */
-@media only screen 
-  and (min-device-width: 375px) 
-  and (max-device-width: 812px) 
-  and (-webkit-min-device-pixel-ratio: 3) { 
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) {
+  #game-board {
+    max-width: 150px;
+  }
 
-    #game-board {
-        max-width: 150px;
-    }
-
-    .board-square {
-        width: 50px;
-        height: 50px;
-        font-size: 32px;
-    }
+  .board-square {
+    width: 50px;
+    height: 50px;
+    font-size: 32px;
+  }
 }
