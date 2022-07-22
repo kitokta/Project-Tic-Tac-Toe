@@ -189,34 +189,70 @@ class uiTask {
       IA.numberOfPlays++;
     }
   }
+
+  static getPlayerName() {
+      //Human value inputs
+  let name = prompt("What's your name?");
+  if(name == "") {
+    const nameWarning = document.createElement("h1");
+    nameWarning.innerText = "Please insert a name! The IA needs to know it to read your mind!"
+    nameWarning.classList.add("heading")
+    nameWarning.classList.add("show")
+    nameWarning.setAttribute('id', 'name-warning');
+    setTimeout("location.reload(true);", 5000);
+  }
+  else return name;
+  }
+
+  static remove() {
+    for (let i=0; i<arguments.length; i++) {
+      arguments[i].remove()
+    }
+  }
+
 }
 
 //EVENTS: START GAME
-const button = document.querySelector("button");
+const markerButtonX = document.getElementById("x");
+const markerButtonO = document.getElementById("o");
 const contentBox = document.querySelector("content");
-button.addEventListener("click", () => {
-  button.remove();
 
-  //Human value inputs
-  let name = prompt("What's your name?");
-  if (name == "") {
-    alert("Please insert a valid name!");
-    setTimeout("location.reload(true);", 1);
-  }
-  let marker = prompt("Choose a marker: X or O");
-  marker = marker.toUpperCase();
-  if (marker != "X" && marker != "O") {
-    alert("Please insert a valid marker!");
-    setTimeout("location.reload(true);", 1);
-  }
+//Marker Button X
+markerButtonX.addEventListener("click", () => {
+  //remove html from screen
+  const markerWarning = document.getElementById("marker-warning");
+  uiTask.remove(markerButtonO, markerButtonX, markerWarning);
+  
+  //Ask human for name input
+  let marker = "X";
+  uiTask.getPlayerName();
   const human = new Player(name, marker);
 
   //IA player inputs
-  let iaMarker = "";
-  if (marker == "X") iaMarker = "O";
-  else iaMarker = "X";
+  let iaMarker = "O";
   const IA = new Player("machine", iaMarker);
 
   //Starting Game
   uiTask.game(human, IA);
 });
+
+//Marker Button O
+markerButtonO.addEventListener("click", () => {
+  //remove html from screen
+  const markerWarning = document.getElementById("marker-warning");
+  uiTask.remove(markerButtonO, markerButtonX, markerWarning);
+  
+  //Ask human for name input
+  let marker = "O";
+  uiTask.getPlayerName();
+  const human = new Player(name, marker);
+
+//IA player inputs
+let iaMarker = "X";
+const IA = new Player("machine", iaMarker);
+
+//Starting Game
+uiTask.game(human, IA);
+});
+
+  

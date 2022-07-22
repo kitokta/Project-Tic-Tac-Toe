@@ -18,17 +18,40 @@ body {
     justify-content: center;
     align-items: center;
     padding: 25px;
+    gap: 20px;
 }
+
+.heading {
+    color:#A31C5D;
+    font-size: 48px;
+}
+
+#name-warning {
+    visibility: hidden;
+}
+#button-container {
+    display: flex;
+    gap: 20px;
+}
+
 .button {
-    color: #FBFEDA;
-    background-color: #A31C5D;
-    height: 60px;
+    color: #A31C5D;
+    background-color: #FBFEDA;
+    height: 80px;
+    width: 100px;
+    font-size: 40px;
     padding: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 10px;
     border-color: #FF6E96;
+}
+
+.button:hover {
+    background-color: #A31C5D;
+    color: #FBFEDA;
+    border: 2px;
 }
 
 #game-board {
