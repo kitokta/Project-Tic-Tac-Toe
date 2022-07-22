@@ -48,7 +48,7 @@ const gameBoard = (() => {
       winMessage.textContent = `Congratulations! ${human.name} have won!`;
       winMessage.style.paddingBottom = "65px";
       winMessage.style.color = "#0680FF";
-      const contentBody = document.getElementById("content");
+      const contentBody = document.querySelector(".content");
       return (
         contentBody.prepend(winMessage),
         setTimeout("location.reload(true);", 5000)
@@ -80,7 +80,7 @@ const gameBoard = (() => {
       winMessage.textContent = `Im Sorry! The ${IA.name} has won!`;
       winMessage.style.color = "#C73E1D";
       winMessage.style.paddingBottom = "65px";
-      const contentBody = document.getElementById("content");
+      const contentBody = document.querySelector(".content");
       return (
         contentBody.prepend(winMessage),
         setTimeout("location.reload(true);", 5000)
@@ -96,7 +96,7 @@ const gameBoard = (() => {
       winMessage.textContent = `ITS A TIE! BETTER LUCK NEXT TIME!`;
       winMessage.style.color = "#FF9EAA";
       winMessage.style.paddingBottom = "65px";
-      const contentBody = document.getElementById("content");
+      const contentBody = document.querySelector(".content");
       return (
         contentBody.prepend(winMessage),
         setTimeout("location.reload(true);", 5000)
@@ -133,13 +133,8 @@ class Player {
   }
 }
 
-//UI TASKS CLASS
-class uiTask {
-  static game(human, IA) {
-    const board = gameBoard.create();
-    const boardBox = document.getElementById("game-board");
-    boardBox.classList.add("show");
-
+class Game {
+  static gameController(human, IA, board) {
     if (human.marker == "X") {
       for (let i = 0; i < board.length; i++) {
         board[i].addEventListener("click", () => {
@@ -179,6 +174,16 @@ class uiTask {
       }
     }
   }
+}
+
+//UI TASKS CLASS
+class uiTask {
+  static display(human, IA) {
+    const board = gameBoard.create();
+    const boardBox = document.getElementById("game-board");
+    boardBox.classList.add("show");
+    Game.gameController(human, IA, board);
+  }
 
   static firstPlay(IA, board) {
     //IA easyPlay
@@ -192,7 +197,7 @@ class uiTask {
 
   static getPlayerName() {
     //Human value inputs
-    let name = prompt("What's your name?");
+    const name = prompt("What's your name?");
     if (name == "") {
       const nameWarning = document.createElement("h1");
       const contentBox = document.querySelector(".content");
@@ -203,8 +208,8 @@ class uiTask {
       nameWarning.setAttribute("id", "name-warning");
       contentBox.prepend(nameWarning);
       setTimeout("location.reload(true);", 5000);
-      return false;
-    } else return name, true;
+      
+    } return name;
   }
 
   static remove() {
@@ -223,20 +228,14 @@ markerButtonX.addEventListener("click", () => {
   //remove html from screen
   const markerWarning = document.getElementById("marker-warning");
   uiTask.remove(markerButtonO, markerButtonX, markerWarning);
-
   //Ask human for name input
-  if (uiTask.getPlayerName() === true) {
-    let marker = "X";
-    const human = new Player(name, marker);
-
-    //IA player inputs
-    let iaMarker = "O";
-    const IA = new Player("machine", iaMarker);
-
-    //Starting Game
-    //Cheking if the human inserted name
-    uiTask.game(human, IA);
-  }
+  const name = uiTask.getPlayerName();
+  const human = new Player(name, "X");
+  //IA player inputs
+  const IA = new Player("machine", "O");
+  //Starting Game
+  //Cheking if the human inserted name
+  if (human.name != "") uiTask.display(human, IA);
 });
 
 //Marker Button O
@@ -246,15 +245,11 @@ markerButtonO.addEventListener("click", () => {
   uiTask.remove(markerButtonO, markerButtonX, markerWarning);
 
   //Ask human for name input
-  if (uiTask.getPlayerName() === true) {
-    let marker = "O";
-    const human = new Player(name, marker);
+  const name = uiTask.getPlayerName();
+  const human = new Player(name, "O");
+  //IA player inputs
+  const IA = new Player("machine", "X");
 
-    //IA player inputs
-    let iaMarker = "X";
-    const IA = new Player("machine", iaMarker);
-
-    //Starting Game
-    uiTask.game(human, IA);
-  }
+  //Starting Game
+  if (human.name != "") uiTask.display(human, IA);
 });
