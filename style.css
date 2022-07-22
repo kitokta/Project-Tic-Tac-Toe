@@ -52,7 +52,23 @@ body {
     align-items: center;
     font-size: 64px;
     flex-shrink: 0;
-    background-color: #FFC9DB;
+    background-color: #FBFEDA;
+    border-radius: 2px;
+}
+
+.board-square.left {
+    border-left: none;
+}
+.board-square.right {
+    border-right: none;
+}
+
+.board-square.top {
+    border-top: none;
+}
+
+.board-square.bottom {
+    border-bottom: none;
 }
 
 /* Mobile */
