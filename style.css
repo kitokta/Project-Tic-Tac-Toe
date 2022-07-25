@@ -12,6 +12,52 @@ body {
   background-color: #fbfeda;
 }
 
+.win {
+  border-color: #0680FF !important;
+  background-color: #0680FF !important;
+  color: #fbfeda !important;
+  border-radius: 2.5px !important;
+  border-width: 2.2px !important;
+  opacity: 0.7 !important;
+}
+
+.lose {
+  border-color: #ff3333 !important;
+  background-color: #ff3333 !important;
+  color: #fbfeda !important;
+  border-radius: 5px !important;
+  border-width: 2.2px !important;
+  opacity: 0.8 !important;
+}
+
+#modal {
+  background-color: #fbfeda;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 20px;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -66,6 +112,8 @@ body {
 /* Classe que deixa visivel o board */
 .show {
   visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
 }
 
 .board-square {

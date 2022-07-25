@@ -5,6 +5,15 @@ const gameBoard = (() => {
     return board;
   };
 
+  const reset = () => {
+    const board = document.getElementsByClassName("board-square");
+    for (let i = 0; i < board.length; i++) {
+      board[i].innerText = "";
+      board[i].classList.remove("lose");
+      board[i].classList.remove("win");
+    }
+  };
+
   const checkScores = (arr, values) => {
     return values.every((value) => {
       return arr.includes(value);
@@ -13,16 +22,16 @@ const gameBoard = (() => {
 
   const winConditions = () => {
     return [
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-}
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+  };
 
   const checkFields = (human, IA) => {
     //Wincons
@@ -40,23 +49,22 @@ const gameBoard = (() => {
       if (checkScores(humanIndex, winCons[i])) {
         for (let c = 0; c < winCons[i].length; c++) {
           const square = document.getElementById(`${winCons[i][c]}`);
-          square.style.borderColor = "#0680FF";
-          square.style.borderWidth = "2.2px";
+          square.classList.add("win");
         }
         human.winner = true;
       }
     }
 
+    //IF human wins, show modal
     if (human.winner == true) {
       const winMessage = document.createElement("h1");
+      const modal = document.getElementById("modal");
       winMessage.textContent = `Congratulations! ${human.name} have won!`;
       winMessage.style.paddingBottom = "65px";
       winMessage.style.color = "#0680FF";
       const contentBody = document.querySelector(".content");
-      return (
-        contentBody.prepend(winMessage),
-        setTimeout("location.reload(true);", 5000)
-      );
+      contentBody.prepend(winMessage);
+      uiTask.displayModal(winMessage, modal, human, IA);
     }
 
     //IA
@@ -72,8 +80,7 @@ const gameBoard = (() => {
       if (checkScores(iaIndex, winCons[i])) {
         for (let c = 0; c < winCons[i].length; c++) {
           const square = document.getElementById(`${winCons[i][c]}`);
-          square.style.borderColor = "#FF0018";
-          square.style.borderWidth = "2.2px";
+          square.classList.add("lose");
         }
         IA.winner = true;
       }
@@ -85,10 +92,8 @@ const gameBoard = (() => {
       winMessage.style.color = "#C73E1D";
       winMessage.style.paddingBottom = "65px";
       const contentBody = document.querySelector(".content");
-      return (
-        contentBody.prepend(winMessage),
-        setTimeout("location.reload(true);", 5000)
-      );
+      contentBody.prepend(winMessage);
+      uiTask.displayModal(winMessage, modal, human, IA);
     }
 
     //Checking if its a tie
@@ -101,14 +106,11 @@ const gameBoard = (() => {
       winMessage.style.color = "#FF9EAA";
       winMessage.style.paddingBottom = "65px";
       const contentBody = document.querySelector(".content");
-      return (
-        contentBody.prepend(winMessage),
-        setTimeout("location.reload(true);", 5000)
-      );
+      contentBody.prepend(winMessage);
+      uiTask.displayModal(winMessage, modal, human, IA);
     }
   };
-
-  return { create, checkFields, winConditions };
+  return { create, checkFields, winConditions, reset };
 })();
 
 //PLAYER CLASS
@@ -121,7 +123,13 @@ class Player {
     this.winner = false;
   }
 
-  easyPlay(IA, board) {
+  reset() {
+    this.played = ["0", "0", "0", "0", "0", "0", "0", "0", "0"];
+    this.numberOfPlays = 0;
+    this.winner = false;
+  }
+
+  easyPlay(IA, human, board) {
     //IA only stop playing when finds a blank space to play.
     //IA easyPlay
     //IA only plays if there is not already a winner
@@ -132,7 +140,7 @@ class Player {
         IA.played[easyPlay] = "1";
         IA.numberOfPlays++;
         hasPlayed = true;
-        return (board[easyPlay].innerText = `${IA.marker}`);
+        return (board[easyPlay].innerText = `${IA.marker}`, gameBoard.checkFields(human, IA));
       }
     }
   }
@@ -161,19 +169,19 @@ class Player {
         if (board[winCon[2]].innerText == "") {
           IA.played[winCon[2]] = "1";
           IA.numberOfPlays++;
-          return (board[winCon[2]].innerText = `${IA.marker}`);
+          return (board[winCon[2]].innerText = `${IA.marker}`, gameBoard.checkFields(human, IA));
         }
       } else if (iaIndex.includes(winCon[0]) && iaIndex.includes(winCon[2])) {
         if (board[winCon[1]].innerText == "") {
           IA.played[winCon[1]] = "1";
           IA.numberOfPlays++;
-          return (board[winCon[1]].innerText = `${IA.marker}`);
+          return (board[winCon[1]].innerText = `${IA.marker}`, gameBoard.checkFields(human, IA));
         }
       } else if (iaIndex.includes(winCon[1]) && iaIndex.includes(winCon[2])) {
         if (board[winCon[0]].innerText == "") {
           IA.played[winCon[0]] = "1";
           IA.numberOfPlays++;
-          return (board[winCon[0]].innerText = `${IA.marker}`);
+          return (board[winCon[0]].innerText = `${IA.marker}`, gameBoard.checkFields(human, IA));
         }
       }
     }
@@ -183,7 +191,7 @@ class Player {
         if (board[winCon[2]].innerText == "") {
           IA.played[winCon[2]] = "1";
           IA.numberOfPlays++;
-          return (board[winCon[2]].innerText = `${IA.marker}`);
+          return (board[winCon[2]].innerText = `${IA.marker}`, gameBoard.checkFields(human, IA));
         }
       } else if (
         humanIndex.includes(winCon[0]) &&
@@ -192,7 +200,7 @@ class Player {
         if (board[winCon[1]].innerText == "") {
           IA.played[winCon[1]] = "1";
           IA.numberOfPlays++;
-          return (board[winCon[1]].innerText = `${IA.marker}`);
+          return (board[winCon[1]].innerText = `${IA.marker}`, gameBoard.checkFields(human, IA));
         }
       } else if (
         humanIndex.includes(winCon[1]) &&
@@ -201,13 +209,14 @@ class Player {
         if (board[winCon[0]].innerText == "") {
           IA.played[winCon[0]] = "1";
           IA.numberOfPlays++;
-          return (board[winCon[0]].innerText = `${IA.marker}`);
+          return (board[winCon[0]].innerText = `${IA.marker}`, gameBoard.checkFields(human, IA));
         }
       }
     }
-    return IA.easyPlay(IA, board);
+    return IA.easyPlay(IA, human, board);
   }
 }
+
 class Game {
   static gameController(human, IA, board) {
     if (human.marker == "X") {
@@ -223,10 +232,6 @@ class Game {
             if (human.winner != true && IA.winner != true)
               IA.hardPlay(IA, human, board);
           }
-          //Timeout to show player and IA inputs before testing the fields for wincons or tie!
-          //Testing if there isnt already a winner
-          if (human.winner != true && IA.winner != true)
-            setTimeout(gameBoard.checkFields, 300, human, IA);
         });
       }
     } else {
@@ -243,10 +248,6 @@ class Game {
             if (human.winner != true && IA.winner != true)
               IA.hardPlay(IA, human, board);
           }
-          //Timeout to show player and IA inputs before testing the fields for wincons or tie!
-          //Testing if there isnt already a winner
-          if (human.winner != true && IA.winner != true)
-            setTimeout(gameBoard.checkFields, 300, human, IA);
         });
       }
     }
@@ -277,6 +278,30 @@ class uiTask {
       setTimeout("location.reload(true);", 5000);
     }
     return name;
+  }
+
+  static displayModal(winMessage, modal, human, IA) {
+    setTimeout(() => {
+      modal.classList.add("show");
+      gameBoard.reset(); //gameBoard reset
+      winMessage.remove();
+    }, 2000);
+    //MODAL LISTENER
+    const btnYes = document.getElementById("yes");
+    const btnNo = document.getElementById("no");
+
+    //Continue button
+    btnYes.addEventListener("click", () => {
+      human.reset();
+      IA.reset();
+      uiTask.display(human, IA);
+      modal.classList.remove("show");
+    });
+
+    //No continue button
+    btnNo.addEventListener("click", () => {
+      location.reload(true);
+    });
   }
 
   static remove() {
