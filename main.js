@@ -102,6 +102,8 @@ const gameBoard = (() => {
         setTimeout("location.reload(true);", 5000)
       );
     }
+
+    return winCons;
   };
 
   return { create, checkFields };
@@ -117,24 +119,93 @@ class Player {
     this.winner = false;
   }
 
-  iaPlay(IA, board) {
+  easyPlay(IA, board) {
     //IA only stop playing when finds a blank space to play.
     //IA easyPlay
     //IA only plays if there is not already a winner
-    let i = 1;
-    while(i!=0) {
+    let hasPlayed = false;
+    while (hasPlayed != true) {
       let easyPlay = Math.floor(Math.random() * board.length);
       if (board[easyPlay].innerText == "") {
         IA.played[easyPlay] = "1";
         IA.numberOfPlays++;
-        i = 0;
+        hasPlayed = true;
         return (board[easyPlay].innerText = `${IA.marker}`);
       }
-      i++;
     }
   }
-}
 
+  hardPlay(IA, human, board) {
+    //Receives the winCons array from checkFields;
+    const winCons = gameBoard.checkFields(human, IA);
+    let iaIndex = [];
+    let humanIndex = [];
+    //For each cell that was played by the AIplayer we push its index to another array so we can test all win cons later
+    human.played.forEach((cell, index) => {
+      if (cell === "1") {
+        humanIndex.push(index);
+      }
+    });
+
+    IA.played.forEach((cell, index) => {
+      if (cell === "1") {
+        iaIndex.push(index);
+      }
+    });
+
+    for (const winCon of winCons) {
+      //AI possibilities of win check:
+      if (iaIndex.includes(winCon[0]) && iaIndex.includes(winCon[1])) {
+        if (board[winCon[2]].innerText == "") {
+          IA.played[winCon[2]] = "1";
+          IA.numberOfPlays++;
+          return (board[winCon[2]].innerText = `${IA.marker}`);
+        }
+      } else if (iaIndex.includes(winCon[0]) && iaIndex.includes(winCon[2])) {
+        if (board[winCon[1]].innerText == "") {
+          IA.played[winCon[1]] = "1";
+          IA.numberOfPlays++;
+          return (board[winCon[1]].innerText = `${IA.marker}`);
+        }
+      } else if (iaIndex.includes(winCon[1]) && iaIndex.includes(winCon[2])) {
+        if (board[winCon[0]].innerText == "") {
+          IA.played[winCon[0]] = "1";
+          IA.numberOfPlays++;
+          return (board[winCon[0]].innerText = `${IA.marker}`);
+        }
+      }
+    }
+    for (const winCon of winCons) {
+      //Human possibilities of win check:
+      if (humanIndex.includes(winCon[0]) && humanIndex.includes(winCon[1])) {
+        if (board[winCon[2]].innerText == "") {
+          IA.played[winCon[2]] = "1";
+          IA.numberOfPlays++;
+          return (board[winCon[2]].innerText = `${IA.marker}`);
+        }
+      } else if (
+        humanIndex.includes(winCon[0]) &&
+        humanIndex.includes(winCon[2])
+      ) {
+        if (board[winCon[1]].innerText == "") {
+          IA.played[winCon[1]] = "1";
+          IA.numberOfPlays++;
+          return (board[winCon[1]].innerText = `${IA.marker}`);
+        }
+      } else if (
+        humanIndex.includes(winCon[1]) &&
+        humanIndex.includes(winCon[2])
+      ) {
+        if (board[winCon[0]].innerText == "") {
+          IA.played[winCon[0]] = "1";
+          IA.numberOfPlays++;
+          return (board[winCon[0]].innerText = `${IA.marker}`);
+        }
+      }
+    }
+    return IA.easyPlay(IA, board);
+  }
+}
 class Game {
   static gameController(human, IA, board) {
     if (human.marker == "X") {
@@ -147,7 +218,8 @@ class Game {
             human.numberOfPlays++;
             if (human.winner != true && IA.winner != true)
               gameBoard.checkFields(human, IA);
-            if (human.winner != true && IA.winner != true) IA.iaPlay(IA, board);
+            if (human.winner != true && IA.winner != true)
+              IA.hardPlay(IA, human, board);
           }
           //Timeout to show player and IA inputs before testing the fields for wincons or tie!
           //Testing if there isnt already a winner
@@ -156,7 +228,7 @@ class Game {
         });
       }
     } else {
-      setTimeout(IA.iaPlay(IA,board), 300, IA, board);
+      setTimeout(IA.hardPlay(IA, human, board), 300, IA, board);
       for (let i = 0; i < board.length; i++) {
         board[i].addEventListener("click", () => {
           if (board[i].innerText == "") {
@@ -166,7 +238,8 @@ class Game {
             human.numberOfPlays++;
             if (human.winner != true && IA.winner != true)
               gameBoard.checkFields(human, IA);
-            if (human.winner != true && IA.winner != true) IA.iaPlay(IA, board);
+            if (human.winner != true && IA.winner != true)
+              IA.hardPlay(IA, human, board);
           }
           //Timeout to show player and IA inputs before testing the fields for wincons or tie!
           //Testing if there isnt already a winner
@@ -200,8 +273,8 @@ class uiTask {
       nameWarning.setAttribute("id", "name-warning");
       contentBox.prepend(nameWarning);
       setTimeout("location.reload(true);", 5000);
-      
-    } return name;
+    }
+    return name;
   }
 
   static remove() {
