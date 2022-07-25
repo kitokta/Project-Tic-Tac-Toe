@@ -11,18 +11,22 @@ const gameBoard = (() => {
     });
   };
 
+  const winConditions = () => {
+    return [
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+}
+
   const checkFields = (human, IA) => {
     //Wincons
-    const winCons = [
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
+    const winCons = winConditions();
 
     //Human
     let humanIndex = [];
@@ -102,11 +106,9 @@ const gameBoard = (() => {
         setTimeout("location.reload(true);", 5000)
       );
     }
-
-    return winCons;
   };
 
-  return { create, checkFields };
+  return { create, checkFields, winConditions };
 })();
 
 //PLAYER CLASS
@@ -137,7 +139,7 @@ class Player {
 
   hardPlay(IA, human, board) {
     //Receives the winCons array from checkFields;
-    const winCons = gameBoard.checkFields(human, IA);
+    const winCons = gameBoard.winConditions();
     let iaIndex = [];
     let humanIndex = [];
     //For each cell that was played by the AIplayer we push its index to another array so we can test all win cons later
