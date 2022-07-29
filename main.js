@@ -235,7 +235,8 @@ class Game {
         });
       }
     } else {
-      setTimeout(IA.hardPlay(IA, human, board), 300, IA, board);
+      //Impedindo que jogue toda vez que passar por aqui
+      if (IA.numberOfPlays<1) setTimeout(IA.hardPlay(IA, human, board), 300, IA, board);
       for (let i = 0; i < board.length; i++) {
         board[i].addEventListener("click", () => {
           if (board[i].innerText == "") {
@@ -293,7 +294,8 @@ class uiTask {
     //Continue button
     btnYes.addEventListener("click", () => {
       human.reset();
-      IA.reset();
+      //Prevents from IA playing two times after some continue attempts
+      if (IA.numberOfPlays!=1) IA.reset();
       uiTask.display(human, IA);
       modal.classList.remove("show");
     });
