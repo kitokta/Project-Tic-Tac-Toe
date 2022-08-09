@@ -264,9 +264,9 @@ class uiTask {
     Game.gameController(human, IA, board);
   }
 
-  static getPlayerName() {
+  static getPlayerName(nameInput) {
     //Human value inputs
-    const name = prompt("What's your name?");
+    const name = nameInput.value;
     if (name == "") {
       const nameWarning = document.createElement("h1");
       const contentBox = document.querySelector(".content");
@@ -276,9 +276,13 @@ class uiTask {
       nameWarning.classList.add("show");
       nameWarning.setAttribute("id", "name-warning");
       contentBox.prepend(nameWarning);
-      setTimeout("location.reload(true);", 5000);
+      setTimeout(()=> {
+        const markerWarning = document.getElementById("marker-warning");
+        contentBox.removeChild(nameWarning);
+        uiTask.show(nameInput, markerButtonO, markerButtonX, markerWarning);
+      }, 4000)
     }
-    return name;
+    else return name;
   }
 
   static displayModal(winMessage, modal, human, IA) {
@@ -308,7 +312,15 @@ class uiTask {
 
   static remove() {
     for (let i = 0; i < arguments.length; i++) {
-      arguments[i].remove();
+      arguments[i].classList.remove("show");
+      arguments[i].style.display = "none";
+    }
+  }
+
+  static show() {
+    for (let i = 0; i < arguments.length; i++) {
+      arguments[i].classList.add("show");
+      arguments[i].style.display = "inline";
     }
   }
 }
@@ -316,34 +328,35 @@ class uiTask {
 //EVENTS: START GAME
 const markerButtonX = document.getElementById("x");
 const markerButtonO = document.getElementById("o");
+const nameInput = document.getElementById("name");
 
 //Marker Button X
 markerButtonX.addEventListener("click", () => {
   //remove html from screen
   const markerWarning = document.getElementById("marker-warning");
-  uiTask.remove(markerButtonO, markerButtonX, markerWarning);
+  uiTask.remove(markerButtonO, markerButtonX, markerWarning, nameInput);
   //Ask human for name input
-  const name = uiTask.getPlayerName();
+  const name = uiTask.getPlayerName(nameInput);
   const human = new Player(name, "X");
   //IA player inputs
   const IA = new Player("machine", "O");
   //Starting Game
   //Cheking if the human inserted name
-  if (human.name != "") uiTask.display(human, IA);
+  if (human.name != "" && human.name != undefined) uiTask.display(human, IA);
 });
 
 //Marker Button O
 markerButtonO.addEventListener("click", () => {
   //remove html from screen
   const markerWarning = document.getElementById("marker-warning");
-  uiTask.remove(markerButtonO, markerButtonX, markerWarning);
+  uiTask.remove(markerButtonO, markerButtonX, markerWarning, nameInput);
 
   //Ask human for name input
-  const name = uiTask.getPlayerName();
+  const name = uiTask.getPlayerName(nameInput);
   const human = new Player(name, "O");
   //IA player inputs
   const IA = new Player("machine", "X");
 
   //Starting Game
-  if (human.name != "") uiTask.display(human, IA);
+  if (human.name != "" && human.name != undefined) uiTask.display(human, IA);
 });
