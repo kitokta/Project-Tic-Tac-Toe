@@ -12,6 +12,20 @@ body {
   background-color: #fbfeda;
 }
 
+#name {
+  height: 50px;
+  width: 300px;
+  border-radius: 10px;
+  font-size: 24px;
+  padding: 5px;
+  background-color: #fbfeda;
+  border: 2px solid #FF9EAA;
+}
+
+#name:focus {
+  outline: none;
+}
+
 .win {
   border-color: #0680FF !important;
   background-color: #0680FF !important;
