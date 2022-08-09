@@ -59,7 +59,7 @@ const gameBoard = (() => {
     if (human.winner == true) {
       const winMessage = document.createElement("h1");
       const modal = document.getElementById("modal");
-      winMessage.textContent = `Congratulations! ${human.name} have won!`;
+      winMessage.textContent = `Congratulations! ${human.name} has won!`;
       winMessage.classList.add("win-color");
       winMessage.classList.add("win-message");
       const contentBody = document.querySelector(".content");
