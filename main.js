@@ -60,8 +60,8 @@ const gameBoard = (() => {
       const winMessage = document.createElement("h1");
       const modal = document.getElementById("modal");
       winMessage.textContent = `Congratulations! ${human.name} have won!`;
-      winMessage.style.paddingBottom = "65px";
-      winMessage.style.color = "#0680FF";
+      winMessage.classList.add("win-color");
+      winMessage.classList.add("win-message");
       const contentBody = document.querySelector(".content");
       contentBody.prepend(winMessage);
       uiTask.displayModal(winMessage, modal, human, IA);
@@ -89,8 +89,8 @@ const gameBoard = (() => {
     if (IA.winner == true) {
       const winMessage = document.createElement("h1");
       winMessage.textContent = `Im Sorry! The ${IA.name} has won!`;
-      winMessage.style.color = "#C73E1D";
-      winMessage.style.paddingBottom = "65px";
+      winMessage.classList.add("win-message");
+      winMessage.classList.add("lose-color");
       const contentBody = document.querySelector(".content");
       contentBody.prepend(winMessage);
       uiTask.displayModal(winMessage, modal, human, IA);
@@ -102,9 +102,9 @@ const gameBoard = (() => {
       human.winner = true;
       IA.winner = true;
       const winMessage = document.createElement("h1");
-      winMessage.textContent = `ITS A TIE! BETTER LUCK NEXT TIME!`;
-      winMessage.style.color = "#FF9EAA";
-      winMessage.style.paddingBottom = "65px";
+      winMessage.textContent = `It's a Tie! Better luck next time!`;
+      winMessage.classList.add("win-message");
+      winMessage.classList.add("lose-color");
       const contentBody = document.querySelector(".content");
       contentBody.prepend(winMessage);
       uiTask.displayModal(winMessage, modal, human, IA);
@@ -320,7 +320,7 @@ class uiTask {
   static show() {
     for (let i = 0; i < arguments.length; i++) {
       arguments[i].classList.add("show");
-      arguments[i].style.display = "inline";
+      arguments[i].style.removeProperty("display");
     }
   }
 }
